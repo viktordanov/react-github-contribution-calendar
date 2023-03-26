@@ -34,7 +34,7 @@ import Calendar from './../lib/index.js';
 
   var elem = document.getElementById('example1');
   ReactDOM.render(<Calendar values={values} until={until}
-                            panelColors={panelColors}/>, elem);
+                            panelColors={panelColors} spacing={{top:8, left:8}}/>, elem);
 })();
 
 (() => {

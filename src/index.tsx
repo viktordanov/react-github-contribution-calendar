@@ -12,6 +12,7 @@ interface Props {
   weekLabelAttributes: any | undefined
   monthLabelAttributes: any | undefined
   panelAttributes: any | undefined
+  spacing?: {top:number, left:number}
 }
 
 interface State {
@@ -42,8 +43,8 @@ export default class GitHubCalendar extends React.Component<Props, State> {
   getPanelPosition(row: number, col: number) {
     const bounds = this.panelSize + this.panelMargin;
     return {
-      x: this.weekLabelWidth + bounds * row,
-      y: this.monthLabelHeight + bounds * col
+      x: this.weekLabelWidth + (this.props.spacing?.left ?? 0) + bounds * row,
+      y: this.monthLabelHeight + (this.props.spacing?.top ?? 0) + bounds * col
     };
   }
 
@@ -113,6 +114,7 @@ export default class GitHubCalendar extends React.Component<Props, State> {
     // week texts
     for (var i = 0; i < this.props.weekNames.length; i++) {
       const textBasePos = this.getPanelPosition(0, i);
+      textBasePos.x -= this.props.spacing?.left ?? 0;
       const dom = (
         <text
           key={ 'week_key_' + i }
@@ -143,6 +145,7 @@ export default class GitHubCalendar extends React.Component<Props, State> {
       }
       if (c.month != prevMonth) {
         var textBasePos = this.getPanelPosition(i, 0);
+        textBasePos.y -= this.props.spacing?.top ?? 0;
         innerDom.push(<text
             key={ 'month_key_' + i }
             style={ {
@@ -171,7 +174,7 @@ export default class GitHubCalendar extends React.Component<Props, State> {
                 fontFamily: 'Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif',
                 width: '100%'
               } }
-              height="110">
+              height={110 + (this.props.spacing?.top ?? 0)}>
               { innerDom }
             </svg>
           </div>
@@ -183,7 +186,7 @@ export default class GitHubCalendar extends React.Component<Props, State> {
   updateSize(size?: BoundingRect) {
     if (!size) return;
 
-    const visibleWeeks = Math.floor((size.width - this.weekLabelWidth) / 13);
+    const visibleWeeks = Math.floor((size.width - this.weekLabelWidth - (this.props.spacing?.left??0)) / 13);
     this.setState({
       columns: Math.min(visibleWeeks, this.state.maxWidth)
     });

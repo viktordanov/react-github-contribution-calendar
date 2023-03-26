@@ -1,6 +1,7 @@
 import React from 'react';
 import { BoundingRect } from 'react-measure';
 interface Props {
+    className?: string;
     weekNames?: string[];
     monthNames?: string[];
     panelColors?: string[];
